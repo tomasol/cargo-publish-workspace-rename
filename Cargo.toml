@@ -5,9 +5,7 @@ edition = "2024"
 
 [workspace]
 resolver = "2"
-members = ["dep",
-#"dep2"
-]
+members = ["dep"]
 
 [workspace.dependencies]
 dep = { package = "prefix-dep", version = "0.1.0", path = "dep" }
