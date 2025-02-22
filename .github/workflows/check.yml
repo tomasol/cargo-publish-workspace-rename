@@ -1,0 +1,35 @@
+name: check
+
+on:
+  push:
+    branches:
+      - "*"
+
+defaults:
+  run:
+    shell: bash -xe {0}
+
+jobs:
+  run:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: nixbuild/nix-quick-install-action@v29
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Populate the nix store
+        run: nix develop --command cargo --version
+      - name: cargo run
+        run: nix develop --command cargo run
+
+  publish:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: nixbuild/nix-quick-install-action@v29
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Populate the nix store
+        run: nix develop --command cargo --version
+      - name: cargo publish workspace
+        run: nix develop --command cargo publish -Z package-workspace --workspace --dry-run
